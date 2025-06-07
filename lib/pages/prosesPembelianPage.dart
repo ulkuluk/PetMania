@@ -1,4 +1,3 @@
-// pages/prosesPembelianPage.dart
 import 'package:flutter/material.dart';
 import '../models/petInSaleModel.dart';
 import '../models/transactionModel.dart';
@@ -197,7 +196,7 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(
-                          'Harga: \$${(transaction.price ?? 0).toStringAsFixed(2)}',
+                          'Harga: \IDR${(transaction.price ?? 0).toStringAsFixed(2)}',
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(
@@ -216,7 +215,6 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            // Tombol untuk mengubah status dari 'pending' atau 'completed' menjadi 'shipping'
                             if (transaction.status == 'paid' ||
                                 transaction.status == 'completed')
                               ElevatedButton(
@@ -245,7 +243,6 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
                                           style: TextStyle(color: Colors.white),
                                         ),
                               ),
-                            // Tombol untuk mengubah status dari 'shipping' menjadi 'delivered'
                             if (transaction.status == 'shipping')
                               ElevatedButton(
                                 onPressed:
@@ -291,7 +288,7 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
     switch (status) {
       case 'completed':
         return Colors.blue;
-      case 'paid': // Tambahkan warna untuk status pending
+      case 'paid': 
         return Colors.blueGrey;
       case 'shipping':
         return Colors.orange;

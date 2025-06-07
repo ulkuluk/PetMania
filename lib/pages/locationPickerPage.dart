@@ -11,8 +11,8 @@ class LocationPickerPage extends StatefulWidget {
 
 class _LocationPickerPageState extends State<LocationPickerPage> {
   GoogleMapController? _mapController;
-  LatLng? _selectedLocation; // Lokasi yang dipilih pengguna
-  Marker? _marker; // Marker untuk lokasi yang dipilih
+  LatLng? _selectedLocation; 
+  Marker? _marker; 
 
   @override
   void initState() {
@@ -45,13 +45,13 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pilih Lokasi di Peta'),
-        backgroundColor: Colors.teal, // Memberikan warna agar terlihat konsisten
+        backgroundColor: Colors.teal, 
         actions: [
           IconButton(
             icon: const Icon(Icons.check, color: Colors.white),
             onPressed: () {
               if (_selectedLocation != null) {
-                Navigator.pop(context, _selectedLocation); // Kirim kembali lokasi yang dipilih
+                Navigator.pop(context, _selectedLocation); 
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Pilih lokasi terlebih dahulu di peta.')),
@@ -67,21 +67,20 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
           target: widget.initialLocation,
           zoom: 12.0,
         ),
-        onTap: _onTap, // Tangani tap pada peta untuk memilih lokasi
-        markers: _marker != null ? {_marker!} : {}, // Tampilkan marker jika ada
-        myLocationEnabled: true, // Aktifkan tombol lokasi saya
+        onTap: _onTap, 
+        markers: _marker != null ? {_marker!} : {}, 
+        myLocationEnabled: true, 
         myLocationButtonEnabled: true,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           if (_mapController != null && _selectedLocation != null) {
-            // Animasi kamera ke lokasi yang dipilih saat ini
             await _mapController!.animateCamera(
               CameraUpdate.newLatLng(_selectedLocation!),
             );
           }
         },
-        backgroundColor: Colors.blueAccent, // Warna FAB
+        backgroundColor: Colors.blueAccent, 
         child: const Icon(Icons.center_focus_strong, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,

@@ -1,9 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive_flutter/hive_flutter.dart'; // Import Hive Flutter
+import 'package:path_provider/path_provider.dart'; // Import path_provider
 import '../pages/homePage.dart';
 import '../pages/loginPage.dart';
+import '../models/favoritePetModel.dart'; // Import model favorit Anda
 
-void main() {
+void main() async { // Ubah menjadi async
+  WidgetsFlutterBinding.ensureInitialized(); // Pastikan Flutter binding diinisialisasi
+
+  // Inisialisasi Hive
+  final appDocumentDir = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDir.path);
+
+  // Daftarkan adapter untuk model FavoritePet Anda
+  // Pastikan Anda sudah menjalankan 'dart run build_runner build'
+  // agar file favoritePetModel.g.dart terbuat
+  Hive.registerAdapter(FavoritePetAdapter());
+
+  // Buka box untuk favorit. Ini akan membuat box jika belum ada.
+  await Hive.openBox<FavoritePet>('favoritePetsBox');
+  // --- Tambahkan baris ini untuk membuka box userBox ---
+  await Hive.openBox('userBox'); // Box untuk menyimpan data user, termasuk path gambar profil
+
   runApp(const MyApp());
 }
 

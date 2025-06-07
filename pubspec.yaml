@@ -2,7 +2,7 @@ name: petmania
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -30,15 +30,25 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
+  intl: ^0.18.1
+  timezone: ^0.9.0
   http: ^1.2.1
   url_launcher: ^6.2.5
   shared_preferences: ^2.2.3
+  geocoding: ^2.2.1
   google_maps_flutter: ^2.5.0
   geolocator: ^10.1.0
   flutter_map: ^6.1.0
   latlong2: ^0.9.0
   permission_handler: ^11.0.1
+  hive: ^2.2.3 # Pastikan versi terbaru
+  hive_flutter: ^1.1.0 # Untuk integrasi Hive dengan Flutter
+  path_provider: ^2.0.11 # Diperlukan untuk menemukan path penyimpanan Hive
+  hive_generator: ^2.0.1  # Tambahkan atau pastikan ini ada
+  build_runner: ^2.4.6
+  image_picker: ^1.1.2
+  flutter_local_notifications: ^17.2.2
+  sensors_plus: ^5.0.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -59,7 +69,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

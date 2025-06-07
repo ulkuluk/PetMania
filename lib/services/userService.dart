@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/userModel.dart';
 
 class UserService {
-  static const String url = "http://10.0.2.2:5000";
+  static const String url = "https://petmania-be-589948883802.us-central1.run.app";
 
   static Future<Map<String, dynamic>> getUsers() async {
     final response = await http.get(Uri.parse(url));
@@ -45,7 +45,6 @@ class UserService {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      // Kamu bisa melempar exception atau return error map
       throw Exception("Login failed: ${response.body}");
     }
   }
@@ -54,12 +53,12 @@ class UserService {
       Uri.parse("$url/logout"),
       headers: {'Content-Type': 'application/json'},
     );
-    // Asumsi backend merespons 200 OK untuk logout
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
       throw Exception("Logout failed: ${response.body}");
     }
   }
+  
 }
 
