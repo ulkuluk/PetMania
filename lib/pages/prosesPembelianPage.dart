@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/petInSaleModel.dart';
 import '../models/transactionModel.dart';
 import '../services/transactionService.dart';
+import 'package:intl/intl.dart'; // Untuk format mata uang dan tanggal
 
 class ProsesPembelianPage extends StatefulWidget {
   final PetInSale pet;
@@ -77,6 +78,8 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
             content: Text(
               'Status transaksi berhasil diperbarui menjadi "$newStatus"!',
             ),
+            backgroundColor: Colors.green.shade600, // Warna sukses
+            behavior: SnackBarBehavior.floating,
           ),
         );
         _fetchTransactionsForPet();
@@ -88,7 +91,11 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
     } catch (e) {
       print('Error updating transaction status: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal memperbarui status: ${e.toString()}')),
+        SnackBar(
+          content: Text('Gagal memperbarui status: ${e.toString()}'),
+          backgroundColor: Colors.red.shade700, // Warna error
+          behavior: SnackBarBehavior.floating,
+        ),
       );
     } finally {
       setState(() {
@@ -100,32 +107,41 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green.shade50, // Latar belakang yang lembut dan sesuai tema
       appBar: AppBar(
-        title: Text('Proses Pembelian: ${widget.pet.name}'),
-        backgroundColor: Colors.blueAccent,
+        title: Text(
+          'Transaksi ${widget.pet.name}',
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.lightGreen.shade700, // Warna hijau gelap yang ramah
+        iconTheme: const IconThemeData(color: Colors.white), // Warna ikon kembali
+        elevation: 0, // Tanpa bayangan
       ),
       body: FutureBuilder<List<Transaction>>(
         future: _transactionsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(color: Colors.lightGreen));
           } else if (snapshot.hasError) {
             return Center(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(24.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
-                      Icons.error_outline,
-                      size: 80,
-                      color: Colors.redAccent,
+                    Icon(
+                      Icons.sentiment_dissatisfied_rounded, // Ikon lebih ekspresif
+                      size: 100,
+                      color: Colors.red.shade400,
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'Error: ${snapshot.error}',
+                      'Oops! Terjadi kesalahan saat memuat data: ${snapshot.error}',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 18, color: Colors.red),
+                      style: TextStyle(fontSize: 18, color: Colors.grey.shade700),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton.icon(
@@ -133,10 +149,14 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
                       icon: const Icon(Icons.refresh, color: Colors.white),
                       label: const Text(
                         'Coba Lagi',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Colors.orange.shade700, // Tombol refresh dengan warna oranye
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
                   ],
@@ -146,20 +166,20 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(24.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
-                      Icons.inbox_rounded,
-                      size: 80,
-                      color: Colors.grey,
+                    Icon(
+                      Icons.pets_rounded, // Ikon hewan yang lucu
+                      size: 100,
+                      color: Colors.lightGreen.shade400,
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'Belum ada transaksi untuk ${widget.pet.name ?? 'hewan ini'}.',
+                      'Belum ada transaksi untuk ${widget.pet.name ?? 'hewan ini'}. Yuk, jual peliharaanmu!',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 18, color: Colors.grey),
+                      style: TextStyle(fontSize: 18, color: Colors.grey.shade700),
                     ),
                   ],
                 ),
@@ -174,104 +194,61 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
                 final transaction = transactions[index];
                 return Card(
                   margin: const EdgeInsets.only(bottom: 16.0),
-                  elevation: 4,
+                  elevation: 6, // Elevasi lebih tinggi
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
+                    borderRadius: BorderRadius.circular(15.0), // Sudut lebih membulat
                   ),
+                  color: Colors.white,
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(20.0), // Padding lebih besar
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'ID Transaksi: ${transaction.id ?? 'N/A'}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Pembeli: ${transaction.buyerEmail ?? 'N/A'}',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Harga: \IDR${(transaction.price ?? 0).toStringAsFixed(2)}',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Alamat Pengiriman: ${transaction.shippingAddress ?? 'N/A'}',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Status Saat Ini: ${transaction.status ?? 'N/A'}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: _getStatusColor(transaction.status),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            if (transaction.status == 'paid' ||
-                                transaction.status == 'completed')
-                              ElevatedButton(
-                                onPressed:
-                                    _isUpdatingStatus
-                                        ? null
-                                        : () => _updateTransactionStatus(
-                                          transaction,
-                                          'shipping',
-                                        ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.orange,
+                            Expanded(
+                              child: Text(
+                                'Transaksi #${transaction.id ?? 'N/A'}',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueGrey.shade800,
                                 ),
-                                child:
-                                    _isUpdatingStatus
-                                        ? const SizedBox(
-                                          width: 20,
-                                          height: 20,
-                                          child: CircularProgressIndicator(
-                                            color: Colors.white,
-                                            strokeWidth: 2,
-                                          ),
-                                        )
-                                        : const Text(
-                                          'Proses Pengiriman',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
                               ),
-                            if (transaction.status == 'shipping')
-                              ElevatedButton(
-                                onPressed:
-                                    _isUpdatingStatus
-                                        ? null
-                                        : () => _updateTransactionStatus(
-                                          transaction,
-                                          'delivered',
-                                        ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                ),
-                                child:
-                                    _isUpdatingStatus
-                                        ? const SizedBox(
-                                          width: 20,
-                                          height: 20,
-                                          child: CircularProgressIndicator(
-                                            color: Colors.white,
-                                            strokeWidth: 2,
-                                          ),
-                                        )
-                                        : const Text(
-                                          'Tandai Terkirim',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            _buildStatusChip(transaction.status), // Gunakan chip status
                           ],
                         ),
+                        const Divider(height: 24, thickness: 1, color: Colors.grey), // Pembatas
+                        _buildInfoRow(
+                          icon: Icons.person_outline,
+                          label: 'Pembeli',
+                          value: transaction.buyerEmail ?? 'N/A',
+                        ),
+                        _buildInfoRow(
+                          icon: Icons.attach_money,
+                          label: 'Harga',
+                          value:
+                              'IDR ${NumberFormat.currency(locale: 'id', symbol: '').format(transaction.price ?? 0)}',
+                        ),
+                        _buildInfoRow(
+                          icon: Icons.location_on_outlined,
+                          label: 'Alamat',
+                          value: transaction.shippingAddress ?? 'N/A',
+                        ),
+                        _buildInfoRow(
+                          icon: Icons.calendar_today_outlined,
+                          label: 'Tanggal',
+                          value: transaction.createdAt != null
+                              ? DateFormat('dd MMMM yyyy, HH:mm').format(
+                                  DateTime.tryParse(transaction.createdAt!) ??
+                                      DateTime.now()) // PERBAIKAN DI SINI
+                              : 'N/A',
+                        ),
+                        const SizedBox(height: 20),
+                        _buildActionButtonRow(transaction),
                       ],
                     ),
                   ),
@@ -284,20 +261,175 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
     );
   }
 
-  Color _getStatusColor(String? status) {
+  // Helper function untuk menampilkan baris informasi
+  Widget _buildInfoRow({
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 20, color: Colors.grey.shade600),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$label:',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey.shade600,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Helper function untuk menampilkan chip status
+  Widget _buildStatusChip(String? status) {
+    String text;
+    Color color;
+    IconData icon;
+
     switch (status) {
       case 'completed':
-        return Colors.blue;
-      case 'paid': 
-        return Colors.blueGrey;
+        text = 'Selesai';
+        color = Colors.green.shade600;
+        icon = Icons.check_circle_outline;
+        break;
+      case 'paid':
+        text = 'Sudah Dibayar';
+        color = Colors.blue.shade600;
+        icon = Icons.payments_outlined;
+        break;
       case 'shipping':
-        return Colors.orange;
+        text = 'Pengiriman'; // Diperpendek dari "Dalam Pengiriman"
+        color = Colors.orange.shade600;
+        icon = Icons.local_shipping_outlined;
+        break;
       case 'delivered':
-        return Colors.green;
+        text = 'Terkirim';
+        color = Colors.purple.shade600;
+        icon = Icons.archive_outlined;
+        break;
       case 'canceled':
-        return Colors.red;
+        text = 'Dibatalkan';
+        color = Colors.red.shade600;
+        icon = Icons.cancel_outlined;
+        break;
       default:
-        return Colors.grey;
+        text = 'Tidak Diketahui';
+        color = Colors.grey.shade600;
+        icon = Icons.help_outline;
     }
+
+    return Flexible(
+      child: Chip(
+        label: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.white, 
+            fontWeight: FontWeight.bold,
+            fontSize: 12, // Ukuran font diperkecil untuk menghindari overflow
+          ),
+          overflow: TextOverflow.ellipsis, // Menangani overflow teks
+        ),
+        avatar: Icon(icon, color: Colors.white, size: 16), // Ukuran ikon diperkecil
+        backgroundColor: color,
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2), // Padding diperkecil
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, // Ukuran tap target diperkecil
+      ),
+    );
+  }
+
+  // Helper function untuk tombol aksi
+  Widget _buildActionButtonRow(Transaction transaction) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        if (transaction.status == 'paid' || transaction.status == 'completed')
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: _isUpdatingStatus
+                  ? null
+                  : () => _updateTransactionStatus(
+                        transaction,
+                        'shipping',
+                      ),
+              icon: _isUpdatingStatus
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : const Icon(Icons.send_outlined, color: Colors.white),
+              label: Text(
+                'Proses Pengiriman',
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange.shade700, // Warna oranye untuk pengiriman
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+        const SizedBox(width: 10), // Spasi antar tombol
+        if (transaction.status == 'shipping')
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: _isUpdatingStatus
+                  ? null
+                  : () => _updateTransactionStatus(
+                        transaction,
+                        'delivered',
+                      ),
+              icon: _isUpdatingStatus
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : const Icon(Icons.check_circle_outline, color: Colors.white),
+              label: Text(
+                'Tandai Terkirim',
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green.shade700, // Warna hijau untuk terkirim
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 }
