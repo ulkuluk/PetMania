@@ -156,12 +156,12 @@ class _AkunPageState extends State<AkunPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Kesan: Mata kuliah Teknologi dan Pemrograman Mobile sangat menarik dan relevan dengan perkembangan teknologi saat ini. Materi yang disampaikan mudah dipahami dan praktikumnya membantu dalam mengaplikasikan teori. Saya sangat menikmati setiap sesi perkuliahan.\n\n',
+                  'Kesan: Mata kuliah Teknologi dan Pemrograman Mobile sangat Menyenangkan.\n\n',
                   textAlign: TextAlign.justify,
                   style: TextStyle(fontSize: 14, fontFamily: 'Montserrat', color: Color(0xFF555555)),
                 ),
                 Text(
-                  'Saran: Akan lebih baik jika ada lebih banyak contoh studi kasus atau proyek mini yang dapat dikerjakan secara berkelompok untuk meningkatkan kolaborasi dan pengalaman riil dalam pengembangan aplikasi mobile.',
+                  'Saran: Reqiurement Buat Perojek Akhir DiKurangin',
                   textAlign: TextAlign.justify,
                   style: TextStyle(fontSize: 14, fontFamily: 'Montserrat', color: Color(0xFF555555)),
                 ),
