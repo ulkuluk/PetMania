@@ -244,7 +244,7 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
                           value: transaction.createdAt != null
                               ? DateFormat('dd MMMM yyyy, HH:mm').format(
                                   DateTime.tryParse(transaction.createdAt!) ??
-                                      DateTime.now()) // PERBAIKAN DI SINI
+                                      DateTime.now())
                               : 'N/A',
                         ),
                         const SizedBox(height: 20),
@@ -344,7 +344,7 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
         label: Text(
           text,
           style: const TextStyle(
-            color: Colors.white, 
+            color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 12, // Ukuran font diperkecil untuk menghindari overflow
           ),
@@ -364,7 +364,7 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        if (transaction.status == 'paid' || transaction.status == 'completed')
+        if (transaction.status == 'paid') // Hanya tampilkan tombol "Proses Pengiriman" jika statusnya "paid"
           Expanded(
             child: ElevatedButton.icon(
               onPressed: _isUpdatingStatus
@@ -383,9 +383,9 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
                       ),
                     )
                   : const Icon(Icons.send_outlined, color: Colors.white),
-              label: Text(
+              label: const Text(
                 'Proses Pengiriman',
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                style: TextStyle(color: Colors.white, fontSize: 14),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange.shade700, // Warna oranye untuk pengiriman
@@ -396,7 +396,8 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
               ),
             ),
           ),
-        const SizedBox(width: 10), // Spasi antar tombol
+        if (transaction.status == 'paid' && transaction.status == 'shipping') // Spasi hanya jika kedua tombol muncul
+          const SizedBox(width: 10), // Spasi antar tombol
         if (transaction.status == 'shipping')
           Expanded(
             child: ElevatedButton.icon(
@@ -416,9 +417,9 @@ class _ProsesPembelianPageState extends State<ProsesPembelianPage> {
                       ),
                     )
                   : const Icon(Icons.check_circle_outline, color: Colors.white),
-              label: Text(
+              label: const Text(
                 'Tandai Terkirim',
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                style: TextStyle(color: Colors.white, fontSize: 14),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green.shade700, // Warna hijau untuk terkirim

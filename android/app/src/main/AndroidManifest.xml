@@ -13,7 +13,7 @@
         android:label="petmania"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBKKskJJtalHax9_x9y7y2XRZSU-U4JcGY"/>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value=""/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
